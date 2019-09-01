@@ -4,9 +4,7 @@ public class CheckoutOrder {
 
     private HashMap<String, Item> inventory = new HashMap<String, Item>();
 
-    public void addItemToInventory( Item item ) throws Exception {
-        if ( inventory.containsKey( item.getItemName() ) )
-            throw new Exception( "Item already exists!" );
+    public void addItemToInventory( Item item ) {
         inventory.put( item.getItemName(), item );
     }
 
