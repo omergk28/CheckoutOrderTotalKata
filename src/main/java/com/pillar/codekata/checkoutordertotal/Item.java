@@ -1,3 +1,5 @@
+package com.pillar.codekata.checkoutordertotal;
+
 import java.math.BigDecimal;
 
 public class Item {

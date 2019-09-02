@@ -1,3 +1,5 @@
+package com.pillar.codekata.checkoutordertotal;
+
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -5,6 +7,25 @@ import java.math.BigDecimal;
 
 public class CheckoutOrderTest {
 
+
+    @Test
+    public void addItemToOrderShouldCreateALineItemAndAddItToOrderItemsAndUpdateTheItemOrderTotalAmount() {
+        CheckoutOrder checkoutOrder = new CheckoutOrder();
+
+        Item testItem = new Item();
+
+        testItem.setItemName( "foo" );
+        testItem.setSoldBy( Item.SOLD_BY.PER_UNIT );
+        testItem.setUnitPrice( new BigDecimal( "12.12" ) );
+
+        checkoutOrder.addItemToInventory( testItem );
+
+        LineItem addedLineItem = checkoutOrder.addItemToOrder( testItem, new BigDecimal( "1" ) );
+
+        Assert.assertTrue( checkoutOrder.getOrderItems().containsKey( addedLineItem.getLineItemId() ) );
+        Assert.assertEquals( new BigDecimal( "1" ), checkoutOrder.getOrderItemTotalAmount()
+                .get( testItem.getItemName() ) );
+    }
 
     @Test
     public void addItemToInventoryShouldUpdatePreviouslyDefinedItem() {
