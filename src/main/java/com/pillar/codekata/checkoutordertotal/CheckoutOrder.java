@@ -7,7 +7,7 @@ import java.util.UUID;
 public class CheckoutOrder {
 
     private HashMap<String, Item> inventory = new HashMap<String, Item>();
-    private HashMap<UUID, LineItem> orderItems = new HashMap<UUID, LineItem>();
+    private HashMap<UUID, LineItem> lineItems = new HashMap<UUID, LineItem>();
     private HashMap<String, BigDecimal> orderItemTotalAmount = new HashMap<String, BigDecimal>();
 
     public void addItemToInventory( Item item ) {
@@ -15,27 +15,30 @@ public class CheckoutOrder {
     }
 
     public LineItem addItemToOrder( Item item, BigDecimal amount ) {
-        LineItem newItem = new LineItem( item, amount );
-        orderItems.put( newItem.getLineItemId(), newItem );
+        LineItem lineItem = new LineItem( item, amount );
+        lineItems.put( lineItem.getLineItemId(), lineItem );
 
-        BigDecimal totalItemAmount = amount;
-        if ( orderItemTotalAmount.containsKey( item.getItemName() ) ) {
-            BigDecimal currentItemAmount = orderItemTotalAmount.get( item.getItemName() );
-            totalItemAmount.add( currentItemAmount );
-        }
-        orderItemTotalAmount.put( item.getItemName(), totalItemAmount );
+        updateOrderItemTotalAmount( item, amount );
 
-        return newItem;
+        return lineItem;
     }
 
-    public HashMap<UUID, LineItem> getOrderItems() {
-        return orderItems;
+    public void updateOrderItemTotalAmount( Item item, BigDecimal amount ) {
+        BigDecimal totalItemAmount = amount;
+        if ( orderItemTotalAmount.containsKey( item.getItemName() ) ) {
+            BigDecimal currentTotal = orderItemTotalAmount.get( item.getItemName() );
+            totalItemAmount = totalItemAmount.add( currentTotal );
+        }
+        orderItemTotalAmount.put( item.getItemName(), totalItemAmount );
+    }
+
+    public HashMap<UUID, LineItem> getLineItems() {
+        return lineItems;
     }
 
     public HashMap<String, BigDecimal> getOrderItemTotalAmount() {
         return orderItemTotalAmount;
     }
-
 
     public HashMap<String, Item> getInventory() {
         return inventory;
