@@ -43,23 +43,41 @@ public class CheckoutOrderTest {
         item4.setSoldBy( Item.SOLD_BY.PER_WEIGHT );
     }
 
+    private void addItemsToInventory() {
+        checkoutOrder.addItemToInventory( item2 );
+        checkoutOrder.addItemToInventory( item3 );
+        checkoutOrder.addItemToInventory( item4 );
+    }
+
     @Test
-    public void updateOrderItemTotalAmountShouldUpdate() {
+    public void scanItemShouldAddItemToOrderAndUpdateTotalPrice() {
+
+        addItemsToInventory();
+
+        LineItem added = checkoutOrder.scanItem( "bar" );
+
+        Assert.assertTrue( checkoutOrder.getLineItems().containsKey( added.getLineItemId() ) );
+
+        Assert.assertEquals( new BigDecimal( "10.00" ), checkoutOrder.getOrderTotal() );
+    }
+
+    @Test
+    public void updateOrderItemAmountShouldUpdateOrderItemAmount() {
         checkoutOrder.addItemToInventory( item1 );
 
-        checkoutOrder.updateOrderItemTotalAmount( item1, new BigDecimal( "1" ) );
+        checkoutOrder.updateOrderItemAmount( item1, new BigDecimal( "1" ) );
 
-        Assert.assertEquals( new BigDecimal( "1" ), checkoutOrder.getOrderItemTotalAmount()
+        Assert.assertEquals( new BigDecimal( "1" ), checkoutOrder.getOrderItemAmount()
                 .get( item1.getItemName() ) );
 
-        checkoutOrder.updateOrderItemTotalAmount( item1, new BigDecimal( "1" ) );
+        checkoutOrder.updateOrderItemAmount( item1, new BigDecimal( "1" ) );
 
-        Assert.assertEquals( new BigDecimal( "2" ), checkoutOrder.getOrderItemTotalAmount()
+        Assert.assertEquals( new BigDecimal( "2" ), checkoutOrder.getOrderItemAmount()
                 .get( item1.getItemName() ) );
 
-        checkoutOrder.updateOrderItemTotalAmount( item1, new BigDecimal( "2" ).negate() );
+        checkoutOrder.updateOrderItemAmount( item1, new BigDecimal( "2" ).negate() );
 
-        Assert.assertEquals( new BigDecimal( "0" ), checkoutOrder.getOrderItemTotalAmount()
+        Assert.assertEquals( new BigDecimal( "0" ), checkoutOrder.getOrderItemAmount()
                 .get( item1.getItemName() ) );
     }
 
@@ -70,7 +88,7 @@ public class CheckoutOrderTest {
         LineItem addedLineItem = checkoutOrder.addItemToOrder( item1, new BigDecimal( "1" ) );
 
         Assert.assertTrue( checkoutOrder.getLineItems().containsKey( addedLineItem.getLineItemId() ) );
-        Assert.assertEquals( new BigDecimal( "1" ), checkoutOrder.getOrderItemTotalAmount()
+        Assert.assertEquals( new BigDecimal( "1" ), checkoutOrder.getOrderItemAmount()
                 .get( item1.getItemName() ) );
     }
 

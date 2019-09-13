@@ -8,7 +8,18 @@ public class CheckoutOrder {
 
     private HashMap<String, Item> inventory = new HashMap<String, Item>();
     private HashMap<UUID, LineItem> lineItems = new HashMap<UUID, LineItem>();
-    private HashMap<String, BigDecimal> orderItemTotalAmount = new HashMap<String, BigDecimal>();
+    private HashMap<String, BigDecimal> orderItemAmount = new HashMap<String, BigDecimal>();
+    private BigDecimal orderTotal = new BigDecimal( "0.00" );
+
+    public LineItem scanItem( String itemName ) {
+        LineItem lineItem = addItemToOrder( inventory.get( itemName ), new BigDecimal( "1" ) );
+        orderTotal = calculateOrderTotal();
+        return lineItem;
+    }
+
+    private BigDecimal calculateOrderTotal() {
+        return new BigDecimal( "10.00" );
+    }
 
     public void addItemToInventory( Item item ) {
         inventory.put( item.getItemName(), item );
@@ -18,33 +29,33 @@ public class CheckoutOrder {
         LineItem lineItem = new LineItem( item, amount );
         lineItems.put( lineItem.getLineItemId(), lineItem );
 
-        updateOrderItemTotalAmount( item, amount );
+        updateOrderItemAmount( item, amount );
 
         return lineItem;
     }
 
-    public void updateOrderItemTotalAmount( Item item, BigDecimal amount ) {
-        BigDecimal totalItemAmount = amount;
-        if ( orderItemTotalAmount.containsKey( item.getItemName() ) ) {
-            BigDecimal currentTotal = orderItemTotalAmount.get( item.getItemName() );
-            totalItemAmount = totalItemAmount.add( currentTotal );
+    public void updateOrderItemAmount( Item item, BigDecimal amount ) {
+        BigDecimal itemAmount = amount;
+        if ( orderItemAmount.containsKey( item.getItemName() ) ) {
+            BigDecimal currentTotal = orderItemAmount.get( item.getItemName() );
+            itemAmount = itemAmount.add( currentTotal );
         }
-        orderItemTotalAmount.put( item.getItemName(), totalItemAmount );
+        orderItemAmount.put( item.getItemName(), itemAmount );
     }
 
     public HashMap<UUID, LineItem> getLineItems() {
         return lineItems;
     }
 
-    public HashMap<String, BigDecimal> getOrderItemTotalAmount() {
-        return orderItemTotalAmount;
+    public HashMap<String, BigDecimal> getOrderItemAmount() {
+        return orderItemAmount;
     }
 
     public HashMap<String, Item> getInventory() {
         return inventory;
     }
 
-    public void setInventory( HashMap<String, Item> inventory ) {
-        this.inventory = inventory;
+    public BigDecimal getOrderTotal() {
+        return orderTotal;
     }
 }
