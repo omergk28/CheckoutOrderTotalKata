@@ -1,6 +1,7 @@
 package com.pillar.codekata.checkoutordertotal;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -10,6 +11,16 @@ public class CheckoutOrder {
     private HashMap<UUID, LineItem> lineItems = new HashMap<UUID, LineItem>();
     private HashMap<String, BigDecimal> orderItemAmount = new HashMap<String, BigDecimal>();
     private BigDecimal orderTotal = new BigDecimal( "0.00" );
+
+    public LineItem scanItemWithWeight( String itemName, String weight ) {
+        // TODO refactor to handle invalid weight input
+        BigDecimal itemWeight = new BigDecimal( weight );
+
+        LineItem lineItem = addItemToOrder( inventory.get( itemName ), itemWeight );
+        orderTotal = calculateOrderTotal();
+
+        return lineItem;
+    }
 
     public LineItem scanItem( String itemName ) {
         LineItem lineItem = addItemToOrder( inventory.get( itemName ), new BigDecimal( "1" ) );
@@ -65,6 +76,6 @@ public class CheckoutOrder {
     }
 
     public BigDecimal getOrderTotal() {
-        return orderTotal;
+        return orderTotal.setScale( 2, RoundingMode.HALF_EVEN );
     }
 }

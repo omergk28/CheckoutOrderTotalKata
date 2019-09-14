@@ -50,6 +50,17 @@ public class CheckoutOrderTest {
     }
 
     @Test
+    public void scanItemWithWeightShouldAddAnItemWithWeightAndUpdateTotalPrice() {
+        addItemsToInventory();
+
+        LineItem added = checkoutOrder.scanItemWithWeight( "bar", "0.5" );
+
+        Assert.assertTrue( checkoutOrder.getLineItems().containsKey( added.getLineItemId() ) );
+
+        Assert.assertEquals( new BigDecimal( "5.00" ), checkoutOrder.getOrderTotal() );
+    }
+
+    @Test
     public void scanItemShouldAddMultipleItemsToOrderAndUpdateTotalPrice() {
         addItemsToInventory();
 
