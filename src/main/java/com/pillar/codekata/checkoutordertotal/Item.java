@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 
 public class Item {
 
-    public enum SOLD_BY {PER_UNIT, PER_WEIGHT}
+    public enum SOLD_BY {PER_UNIT, PER_WEIGHT;}
 
     private String itemName;
     private SOLD_BY soldBy;
@@ -30,7 +30,7 @@ public class Item {
     public BigDecimal getUnitPrice() {
         BigDecimal price = unitPrice;
 
-        if ( markdown != null && markdown.compareTo( new BigDecimal( "0" ) ) > 0 )
+        if ( isMarkedDown() )
             price = price.subtract( markdown );
 
         return price;
@@ -46,5 +46,9 @@ public class Item {
 
     public void setMarkdown( BigDecimal markdown ) {
         this.markdown = markdown;
+    }
+
+    public boolean isMarkedDown() {
+        return markdown != null && markdown.compareTo( new BigDecimal( "0" ) ) > 0;
     }
 }
