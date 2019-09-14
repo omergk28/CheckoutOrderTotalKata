@@ -10,10 +10,11 @@ import java.math.BigDecimal;
 
 public class CheckoutOrderTest {
 
-    Item item1;
-    Item item2;
-    Item item3;
-    Item item4;
+    Item foo;
+    Item fooUpdate;
+    Item bar;
+    Item baz;
+    Item markedDown;
     CheckoutOrder checkoutOrder;
 
     @Rule
@@ -27,31 +28,45 @@ public class CheckoutOrderTest {
     }
 
     private void initializeTestItems() {
-        item1 = new Item();
-        item1.setItemName( "foo" );
-        item1.setSoldBy( Item.SOLD_BY.PER_UNIT );
-        item1.setUnitPrice( new BigDecimal( "12.12" ) );
+        foo = new Item();
+        foo.setItemName( "foo" );
+        foo.setSoldBy( Item.SOLD_BY.PER_UNIT );
+        foo.setUnitPrice( new BigDecimal( "12.12" ) );
 
-        item2 = new Item();
-        item2.setItemName( "foo" );
-        item2.setUnitPrice( new BigDecimal( "13.13" ) );
-        item2.setSoldBy( Item.SOLD_BY.PER_WEIGHT );
+        fooUpdate = new Item();
+        fooUpdate.setItemName( "foo" );
+        fooUpdate.setUnitPrice( new BigDecimal( "13.13" ) );
+        fooUpdate.setSoldBy( Item.SOLD_BY.PER_WEIGHT );
 
-        item3 = new Item();
-        item3.setItemName( "bar" );
-        item3.setUnitPrice( new BigDecimal( "10.00" ) );
-        item3.setSoldBy( Item.SOLD_BY.PER_WEIGHT );
+        bar = new Item();
+        bar.setItemName( "bar" );
+        bar.setUnitPrice( new BigDecimal( "10.00" ) );
+        bar.setSoldBy( Item.SOLD_BY.PER_WEIGHT );
 
-        item4 = new Item();
-        item4.setItemName( "baz" );
-        item4.setUnitPrice( new BigDecimal( "20.00" ) );
-        item4.setSoldBy( Item.SOLD_BY.PER_WEIGHT );
+        baz = new Item();
+        baz.setItemName( "baz" );
+        baz.setUnitPrice( new BigDecimal( "20.00" ) );
+        baz.setSoldBy( Item.SOLD_BY.PER_WEIGHT );
+
+        markedDown = new Item();
+        markedDown.setItemName( "markedDown" );
+        markedDown.setUnitPrice( new BigDecimal( "20.00" ) );
+        markedDown.setSoldBy( Item.SOLD_BY.PER_WEIGHT );
+        markedDown.setMarkdown( new BigDecimal( "5.00" ) );
     }
 
     private void addItemsToInventory() {
-        checkoutOrder.addItemToInventory( item2 );
-        checkoutOrder.addItemToInventory( item3 );
-        checkoutOrder.addItemToInventory( item4 );
+        checkoutOrder.addItemToInventory( foo );
+        checkoutOrder.addItemToInventory( bar );
+        checkoutOrder.addItemToInventory( baz );
+        checkoutOrder.addItemToInventory( markedDown );
+    }
+    
+    @Test
+    public void markedDownItemShouldReturnMarkedDownUnitPrice() {
+        addItemsToInventory();
+
+        Assert.assertEquals( new BigDecimal( "15.00" ), markedDown.getUnitPrice() );
     }
 
     @Test
@@ -101,46 +116,46 @@ public class CheckoutOrderTest {
 
     @Test
     public void updateOrderItemAmountShouldUpdateOrderItemAmount() {
-        checkoutOrder.addItemToInventory( item1 );
+        checkoutOrder.addItemToInventory( foo );
 
-        checkoutOrder.updateOrderItemAmount( item1, new BigDecimal( "1" ) );
+        checkoutOrder.updateOrderItemAmount( foo, new BigDecimal( "1" ) );
 
         Assert.assertEquals( new BigDecimal( "1" ), checkoutOrder.getOrderItemAmount()
-                .get( item1.getItemName() ) );
+                .get( foo.getItemName() ) );
 
-        checkoutOrder.updateOrderItemAmount( item1, new BigDecimal( "1" ) );
+        checkoutOrder.updateOrderItemAmount( foo, new BigDecimal( "1" ) );
 
         Assert.assertEquals( new BigDecimal( "2" ), checkoutOrder.getOrderItemAmount()
-                .get( item1.getItemName() ) );
+                .get( foo.getItemName() ) );
 
-        checkoutOrder.updateOrderItemAmount( item1, new BigDecimal( "2" ).negate() );
+        checkoutOrder.updateOrderItemAmount( foo, new BigDecimal( "2" ).negate() );
 
         Assert.assertEquals( new BigDecimal( "0" ), checkoutOrder.getOrderItemAmount()
-                .get( item1.getItemName() ) );
+                .get( foo.getItemName() ) );
     }
 
     @Test
     public void addItemToOrderShouldCreateALineItemAndAddItToLineItems() {
-        checkoutOrder.addItemToInventory( item1 );
+        checkoutOrder.addItemToInventory( foo );
 
-        LineItem addedLineItem = checkoutOrder.addItemToOrder( item1, new BigDecimal( "1" ) );
+        LineItem addedLineItem = checkoutOrder.addItemToOrder( foo, new BigDecimal( "1" ) );
 
         Assert.assertTrue( checkoutOrder.getLineItems().containsKey( addedLineItem.getLineItemId() ) );
         Assert.assertEquals( new BigDecimal( "1" ), checkoutOrder.getOrderItemAmount()
-                .get( item1.getItemName() ) );
+                .get( foo.getItemName() ) );
     }
 
     @Test
     public void addItemToInventoryShouldUpdatePreviouslyDefinedItem() {
 
-        checkoutOrder.addItemToInventory( item1 );
+        checkoutOrder.addItemToInventory( foo );
 
         Assert.assertTrue( checkoutOrder.getInventory().containsKey( "foo" ) );
         Assert.assertEquals( "foo", checkoutOrder.getInventory().get( "foo" ).getItemName() );
         Assert.assertEquals( Item.SOLD_BY.PER_UNIT, checkoutOrder.getInventory().get( "foo" ).getSoldBy() );
         Assert.assertEquals( new BigDecimal( "12.12" ), checkoutOrder.getInventory().get( "foo" ).getUnitPrice() );
 
-        checkoutOrder.addItemToInventory( item2 );
+        checkoutOrder.addItemToInventory( fooUpdate );
 
         Assert.assertEquals( "foo", checkoutOrder.getInventory().get( "foo" ).getItemName() );
         Assert.assertEquals( Item.SOLD_BY.PER_WEIGHT, checkoutOrder.getInventory().get( "foo" ).getSoldBy() );
@@ -150,7 +165,7 @@ public class CheckoutOrderTest {
     @Test
     public void addItemToInventoryShouldAddItemToInventory() throws Exception {
 
-        checkoutOrder.addItemToInventory( item1 );
+        checkoutOrder.addItemToInventory( foo );
 
         Assert.assertTrue( checkoutOrder.getInventory().containsKey( "foo" ) );
         Assert.assertEquals( "foo", checkoutOrder.getInventory().get( "foo" ).getItemName() );

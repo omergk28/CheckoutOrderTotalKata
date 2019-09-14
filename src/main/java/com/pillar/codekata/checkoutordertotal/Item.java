@@ -9,6 +9,7 @@ public class Item {
     private String itemName;
     private SOLD_BY soldBy;
     private BigDecimal unitPrice;
+    private BigDecimal markdown;
 
     public String getItemName() {
         return itemName;
@@ -27,10 +28,23 @@ public class Item {
     }
 
     public BigDecimal getUnitPrice() {
-        return unitPrice;
+        BigDecimal price = unitPrice;
+
+        if ( markdown != null && markdown.compareTo( new BigDecimal( "0" ) ) > 0 )
+            price = price.subtract( markdown );
+
+        return price;
     }
 
     public void setUnitPrice( BigDecimal unitPrice ) {
         this.unitPrice = unitPrice;
+    }
+
+    public BigDecimal getMarkdown() {
+        return markdown;
+    }
+
+    public void setMarkdown( BigDecimal markdown ) {
+        this.markdown = markdown;
     }
 }
