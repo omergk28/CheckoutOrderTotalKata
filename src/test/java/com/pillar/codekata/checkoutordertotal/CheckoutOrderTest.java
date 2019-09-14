@@ -2,7 +2,9 @@ package com.pillar.codekata.checkoutordertotal;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import java.math.BigDecimal;
 
@@ -13,6 +15,9 @@ public class CheckoutOrderTest {
     Item item3;
     Item item4;
     CheckoutOrder checkoutOrder;
+
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
 
 
     @Before
@@ -47,6 +52,15 @@ public class CheckoutOrderTest {
         checkoutOrder.addItemToInventory( item2 );
         checkoutOrder.addItemToInventory( item3 );
         checkoutOrder.addItemToInventory( item4 );
+    }
+
+    @Test
+    public void scanItemWithWeightShouldThrowForInvalidWeight() {
+        addItemsToInventory();
+
+        thrown.expect( NumberFormatException.class );
+
+        LineItem item = checkoutOrder.scanItemWithWeight( "bar", "invalid" );
     }
 
     @Test

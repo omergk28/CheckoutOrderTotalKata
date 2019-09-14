@@ -13,9 +13,7 @@ public class CheckoutOrder {
     private BigDecimal orderTotal = new BigDecimal( "0.00" );
 
     public LineItem scanItemWithWeight( String itemName, String weight ) {
-        // TODO refactor to handle invalid weight input
         BigDecimal itemWeight = new BigDecimal( weight );
-
         LineItem lineItem = addItemToOrder( inventory.get( itemName ), itemWeight );
         orderTotal = calculateOrderTotal();
 
