@@ -50,7 +50,7 @@ public class CheckoutOrderTest {
     }
 
     @Test
-    public void scanItemShouldAddItemToOrderAndUpdateTotalPrice() {
+    public void scanItemShouldAddAnItemToOrderAndUpdateTotalPrice() {
 
         addItemsToInventory();
 
