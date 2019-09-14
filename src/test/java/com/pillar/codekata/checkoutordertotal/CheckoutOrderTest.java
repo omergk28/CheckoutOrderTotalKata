@@ -61,13 +61,6 @@ public class CheckoutOrderTest {
         checkoutOrder.addItemToInventory( baz );
         checkoutOrder.addItemToInventory( markedDown );
     }
-    
-    @Test
-    public void markedDownItemShouldReturnMarkedDownUnitPrice() {
-        addItemsToInventory();
-
-        Assert.assertEquals( new BigDecimal( "15.00" ), markedDown.getUnitPrice() );
-    }
 
     @Test
     public void scanItemWithWeightShouldThrowForInvalidWeight() {
