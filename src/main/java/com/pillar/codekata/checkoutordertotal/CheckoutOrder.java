@@ -18,7 +18,16 @@ public class CheckoutOrder {
     }
 
     private BigDecimal calculateOrderTotal() {
-        return new BigDecimal( "10.00" );
+        BigDecimal orderTotal = new BigDecimal( "0.00" );
+
+        for ( String itemId : orderItemAmount.keySet() ) {
+            BigDecimal itemUnitPrice = inventory.get( itemId ).getUnitPrice();
+            BigDecimal itemTotalAmount = orderItemAmount.get( itemId );
+            BigDecimal itemTotalPrice = itemUnitPrice.multiply( itemTotalAmount );
+            orderTotal = orderTotal.add( itemTotalPrice );
+        }
+
+        return orderTotal;
     }
 
     public void addItemToInventory( Item item ) {

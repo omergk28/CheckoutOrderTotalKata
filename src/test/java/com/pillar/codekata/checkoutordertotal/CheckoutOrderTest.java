@@ -50,7 +50,20 @@ public class CheckoutOrderTest {
     }
 
     @Test
-    public void scanItemShouldAddItemToOrderAndUpdateTotalPrice() {
+    public void scanItemShouldAddMultipleItemsToOrderAndUpdateTotalPrice() {
+        addItemsToInventory();
+
+        LineItem addedItem1 = checkoutOrder.scanItem( "bar" );
+        LineItem addedItem2 = checkoutOrder.scanItem( "baz" );
+
+        Assert.assertTrue( checkoutOrder.getLineItems().containsKey( addedItem1.getLineItemId() ) );
+        Assert.assertTrue( checkoutOrder.getLineItems().containsKey( addedItem2.getLineItemId() ) );
+
+        Assert.assertEquals( new BigDecimal( "30.00" ), checkoutOrder.getOrderTotal() );
+    }
+
+    @Test
+    public void scanItemShouldAddAnItemToOrderAndUpdateTotalPrice() {
 
         addItemsToInventory();
 
