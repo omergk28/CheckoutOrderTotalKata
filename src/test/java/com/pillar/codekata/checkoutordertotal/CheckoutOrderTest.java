@@ -10,16 +10,14 @@ import java.math.BigDecimal;
 
 public class CheckoutOrderTest {
 
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
     Item foo;
     Item fooUpdate;
     Item bar;
     Item baz;
     Item markedDown;
     CheckoutOrder checkoutOrder;
-
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
-
 
     @Before
     public void setup() {
@@ -55,11 +53,11 @@ public class CheckoutOrderTest {
         markedDown.setMarkdown( new BigDecimal( "5.00" ) );
     }
 
-    private void addItemsToInventory() {
-        checkoutOrder.addItemToInventory( foo );
-        checkoutOrder.addItemToInventory( bar );
-        checkoutOrder.addItemToInventory( baz );
-        checkoutOrder.addItemToInventory( markedDown );
+    @Test
+    public void addBuyNGetMXPercentOffSpecialShouldAddSpecial() {
+        checkoutOrder.addBuyNGetMXPercentOffSpecial( "test", 3, 1, 50 );
+
+        Assert.assertTrue( checkoutOrder.getSpecials().containsKey( "test" ) );
     }
 
     @Test
@@ -69,6 +67,13 @@ public class CheckoutOrderTest {
         thrown.expect( NumberFormatException.class );
 
         LineItem item = checkoutOrder.scanItemWithWeight( "bar", "invalid" );
+    }
+
+    private void addItemsToInventory() {
+        checkoutOrder.addItemToInventory( foo );
+        checkoutOrder.addItemToInventory( bar );
+        checkoutOrder.addItemToInventory( baz );
+        checkoutOrder.addItemToInventory( markedDown );
     }
 
     @Test

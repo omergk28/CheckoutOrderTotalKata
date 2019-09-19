@@ -11,18 +11,13 @@ public class CheckoutOrder {
     private HashMap<UUID, LineItem> lineItems = new HashMap<UUID, LineItem>();
     private HashMap<String, BigDecimal> orderItemAmount = new HashMap<String, BigDecimal>();
     private BigDecimal orderTotal = new BigDecimal( "0.00" );
+    private HashMap<String, Special> specials = new HashMap<String, Special>();
 
     public LineItem scanItemWithWeight( String itemName, String weight ) {
         BigDecimal itemWeight = new BigDecimal( weight );
         LineItem lineItem = addItemToOrder( inventory.get( itemName ), itemWeight );
         orderTotal = calculateOrderTotal();
 
-        return lineItem;
-    }
-
-    public LineItem scanItem( String itemName ) {
-        LineItem lineItem = addItemToOrder( inventory.get( itemName ), new BigDecimal( "1" ) );
-        orderTotal = calculateOrderTotal();
         return lineItem;
     }
 
@@ -37,10 +32,6 @@ public class CheckoutOrder {
         }
 
         return orderTotal;
-    }
-
-    public void addItemToInventory( Item item ) {
-        inventory.put( item.getItemName(), item );
     }
 
     public LineItem addItemToOrder( Item item, BigDecimal amount ) {
@@ -61,6 +52,21 @@ public class CheckoutOrder {
         orderItemAmount.put( item.getItemName(), itemAmount );
     }
 
+    public LineItem scanItem( String itemName ) {
+        LineItem lineItem = addItemToOrder( inventory.get( itemName ), new BigDecimal( "1" ) );
+        orderTotal = calculateOrderTotal();
+        return lineItem;
+    }
+
+    public void addBuyNGetMXPercentOffSpecial( String itemName, int buyN, int getM, int XPercentOff ) {
+        Special special = new Special( buyN, getM, XPercentOff );
+        specials.put( itemName, special );
+    }
+
+    public void addItemToInventory( Item item ) {
+        inventory.put( item.getItemName(), item );
+    }
+
     public HashMap<UUID, LineItem> getLineItems() {
         return lineItems;
     }
@@ -75,5 +81,9 @@ public class CheckoutOrder {
 
     public BigDecimal getOrderTotal() {
         return orderTotal.setScale( 2, RoundingMode.HALF_EVEN );
+    }
+
+    public HashMap<String, Special> getSpecials() {
+        return specials;
     }
 }

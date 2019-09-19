@@ -5,21 +5,21 @@ import java.math.BigDecimal;
 public class Special {
     private int buyN;
     private int getM;
-    private int percentXOff;
+    private int XPercentOff;
     private int limit;
     private BigDecimal forXDollars;
 
-    public Special( int buyN, int getM, int percentXOff, int limit ) {
+    public Special( int buyN, int getM, int XPercentOff, int limit ) {
         this.buyN = buyN;
         this.getM = getM;
-        this.percentXOff = percentXOff;
+        this.XPercentOff = XPercentOff;
         this.limit = limit;
     }
 
-    public Special( int buyN, int getM, int percentXOff ) {
+    public Special( int buyN, int getM, int XPercentOff ) {
         this.buyN = buyN;
         this.getM = getM;
-        this.percentXOff = percentXOff;
+        this.XPercentOff = XPercentOff;
     }
 
     public Special( int buyN, BigDecimal forXDollars ) {
@@ -43,12 +43,12 @@ public class Special {
         this.getM = getM;
     }
 
-    public int getPercentXOff() {
-        return percentXOff;
+    public int getXPercentOff() {
+        return XPercentOff;
     }
 
-    public void setPercentXOff( int percentXOff ) {
-        this.percentXOff = percentXOff;
+    public void setXPercentOff( int XPercentOff ) {
+        this.XPercentOff = XPercentOff;
     }
 
     public BigDecimal getForXDollars() {
