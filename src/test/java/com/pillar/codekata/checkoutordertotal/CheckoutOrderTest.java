@@ -55,10 +55,28 @@ public class CheckoutOrderTest {
     }
 
     @Test
-    public void addBuyNForXDollarsSpecialShouldAddSpecial() {
+    public void addBuyNForXDollarsSpecialShouldAddSpecial() throws Exception {
+        addItemsToInventory();
+        checkoutOrder.addBuyNForXDollarsSpecial( "foo", 3, new BigDecimal( "5.00" ) );
+
+        Assert.assertTrue( checkoutOrder.getSpecials().containsKey( "foo" ) );
+    }
+
+    private void addItemsToInventory() {
+        checkoutOrder.addItemToInventory( foo );
+        checkoutOrder.addItemToInventory( bar );
+        checkoutOrder.addItemToInventory( baz );
+        checkoutOrder.addItemToInventory( markedDown );
+    }
+
+    @Test
+    public void addBuyNForXDollarsSpecialShouldAThrowForInvalidItem() throws Exception {
+
+        thrown.expectMessage( CoreMatchers.startsWith( "Item [test] is not in the inventory!" ) );
+        thrown.expect( Exception.class );
+
         checkoutOrder.addBuyNForXDollarsSpecial( "test", 3, new BigDecimal( "5.00" ) );
 
-        Assert.assertTrue( checkoutOrder.getSpecials().containsKey( "test" ) );
     }
 
     @Test
@@ -68,13 +86,6 @@ public class CheckoutOrderTest {
         checkoutOrder.addBuyNGetMXPercentOffSpecialWithLimit( "baz", 3, 1, 50, 6 );
 
         Assert.assertTrue( checkoutOrder.getSpecials().containsKey( "baz" ) );
-    }
-
-    private void addItemsToInventory() {
-        checkoutOrder.addItemToInventory( foo );
-        checkoutOrder.addItemToInventory( bar );
-        checkoutOrder.addItemToInventory( baz );
-        checkoutOrder.addItemToInventory( markedDown );
     }
 
     @Test

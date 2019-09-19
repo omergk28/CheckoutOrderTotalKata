@@ -58,7 +58,10 @@ public class CheckoutOrder {
         return lineItem;
     }
 
-    public void addBuyNForXDollarsSpecial( String itemName, int buyN, BigDecimal forXDollars ) {
+    public void addBuyNForXDollarsSpecial( String itemName, int buyN, BigDecimal forXDollars ) throws Exception {
+        if ( !inventory.containsKey( itemName ) )
+            throw new Exception( "Item [" + itemName + "] is not in the inventory!" );
+
         Special special = new Special( buyN, forXDollars );
         specials.put( itemName, special );
     }
