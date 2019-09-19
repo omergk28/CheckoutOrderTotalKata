@@ -55,6 +55,14 @@ public class CheckoutOrderTest {
     }
 
     @Test
+    public void checkInventoryForItemShouldThrowForInvalidItem() throws Exception {
+        thrown.expect( Exception.class );
+        thrown.expectMessage( CoreMatchers.startsWith( "Item [test] is not in the inventory!" ) );
+
+        checkoutOrder.checkInventoryForItem( "test" );
+    }
+
+    @Test
     public void addBuyNForXDollarsSpecialShouldAddSpecial() throws Exception {
         addItemsToInventory();
         checkoutOrder.addBuyNForXDollarsSpecial( "foo", 3, new BigDecimal( "5.00" ) );

@@ -59,24 +59,26 @@ public class CheckoutOrder {
     }
 
     public void addBuyNForXDollarsSpecial( String itemName, int buyN, BigDecimal forXDollars ) throws Exception {
-        if ( !inventory.containsKey( itemName ) )
-            throw new Exception( "Item [" + itemName + "] is not in the inventory!" );
+        checkInventoryForItem( itemName );
 
         Special special = new Special( buyN, forXDollars );
         specials.put( itemName, special );
     }
 
-    public void addBuyNGetMXPercentOffSpecialWithLimit( String itemName, int buyN, int getM, int XPercentOff, int limit ) throws Exception {
+    public void checkInventoryForItem( String itemName ) throws Exception {
         if ( !inventory.containsKey( itemName ) )
             throw new Exception( "Item [" + itemName + "] is not in the inventory!" );
+    }
+
+    public void addBuyNGetMXPercentOffSpecialWithLimit( String itemName, int buyN, int getM, int XPercentOff, int limit ) throws Exception {
+        checkInventoryForItem( itemName );
 
         Special special = new Special( buyN, getM, XPercentOff, limit );
         specials.put( itemName, special );
     }
 
     public void addBuyNGetMXPercentOffSpecial( String itemName, int buyN, int getM, int XPercentOff ) throws Exception {
-        if ( !inventory.containsKey( itemName ) )
-            throw new Exception( "Item [" + itemName + "] is not in the inventory!" );
+        checkInventoryForItem( itemName );
 
         Special special = new Special( buyN, getM, XPercentOff );
         specials.put( itemName, special );
