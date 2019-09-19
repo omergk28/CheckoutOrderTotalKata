@@ -54,6 +54,13 @@ public class CheckoutOrderTest {
     }
 
     @Test
+    public void addBuyNGetMXPercentOffSpecialWithLimitShouldAddSpecial() {
+        checkoutOrder.addBuyNGetMXPercentOffSpecialWithLimit( "test", 3, 1, 50, 6 );
+
+        Assert.assertTrue( checkoutOrder.getSpecials().containsKey( "test" ) );
+    }
+
+    @Test
     public void addBuyNGetMXPercentOffSpecialShouldAddSpecial() {
         checkoutOrder.addBuyNGetMXPercentOffSpecial( "test", 3, 1, 50 );
 

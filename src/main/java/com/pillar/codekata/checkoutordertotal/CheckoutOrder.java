@@ -58,6 +58,11 @@ public class CheckoutOrder {
         return lineItem;
     }
 
+    public void addBuyNGetMXPercentOffSpecialWithLimit( String itemName, int buyN, int getM, int XPercentOff, int limit ) {
+        Special special = new Special( buyN, getM, XPercentOff, limit );
+        specials.put( itemName, special );
+    }
+
     public void addBuyNGetMXPercentOffSpecial( String itemName, int buyN, int getM, int XPercentOff ) {
         Special special = new Special( buyN, getM, XPercentOff );
         specials.put( itemName, special );
