@@ -1,5 +1,6 @@
 package com.pillar.codekata.checkoutordertotal;
 
+import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
@@ -68,10 +69,28 @@ public class CheckoutOrderTest {
     }
 
     @Test
-    public void addBuyNGetMXPercentOffSpecialShouldAddSpecial() {
-        checkoutOrder.addBuyNGetMXPercentOffSpecial( "test", 3, 1, 50 );
+    public void addBuyNGetMXPercentOffSpecialShouldAddSpecial() throws Exception {
+        addItemsToInventory();
 
-        Assert.assertTrue( checkoutOrder.getSpecials().containsKey( "test" ) );
+        checkoutOrder.addBuyNGetMXPercentOffSpecial( "bar", 3, 1, 50 );
+
+        Assert.assertTrue( checkoutOrder.getSpecials().containsKey( "bar" ) );
+    }
+
+    private void addItemsToInventory() {
+        checkoutOrder.addItemToInventory( foo );
+        checkoutOrder.addItemToInventory( bar );
+        checkoutOrder.addItemToInventory( baz );
+        checkoutOrder.addItemToInventory( markedDown );
+    }
+
+    @Test
+    public void addBuyNGetMXPercentOffSpecialShouldThrowForInvalidItem() throws Exception {
+
+        thrown.expectMessage( CoreMatchers.startsWith( "Item [test] is not in the inventory!" ) );
+        thrown.expect( Exception.class );
+
+        checkoutOrder.addBuyNGetMXPercentOffSpecial( "test", 3, 1, 50 );
     }
 
     @Test
@@ -81,13 +100,6 @@ public class CheckoutOrderTest {
         thrown.expect( NumberFormatException.class );
 
         LineItem item = checkoutOrder.scanItemWithWeight( "bar", "invalid" );
-    }
-
-    private void addItemsToInventory() {
-        checkoutOrder.addItemToInventory( foo );
-        checkoutOrder.addItemToInventory( bar );
-        checkoutOrder.addItemToInventory( baz );
-        checkoutOrder.addItemToInventory( markedDown );
     }
 
     @Test

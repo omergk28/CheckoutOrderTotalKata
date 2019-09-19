@@ -68,7 +68,10 @@ public class CheckoutOrder {
         specials.put( itemName, special );
     }
 
-    public void addBuyNGetMXPercentOffSpecial( String itemName, int buyN, int getM, int XPercentOff ) {
+    public void addBuyNGetMXPercentOffSpecial( String itemName, int buyN, int getM, int XPercentOff ) throws Exception {
+        if ( !inventory.containsKey( itemName ) )
+            throw new Exception( "Item [" + itemName + "] is not in the inventory!" );
+
         Special special = new Special( buyN, getM, XPercentOff );
         specials.put( itemName, special );
     }
